@@ -12,6 +12,8 @@ use Psr\Log\LoggerInterface;
 // use model
 use App\Models\KategoriModel;
 use App\Models\ProdukModel;
+use App\Models\SliderModel;
+use App\Models\TeamModel;
 
 /**
  * Class BaseController
@@ -39,7 +41,7 @@ abstract class BaseController extends Controller
      *
      * @var array
      */
-    protected $helpers = [];
+    protected $helpers = ['form', 'auth'];
 
     /**
      * Constructor.
@@ -55,5 +57,7 @@ abstract class BaseController extends Controller
 
         $this->KategoriModel = New KategoriModel();
         $this->ProdukModel = New ProdukModel();
+        $this->SliderModel = New SliderModel();
+        $this->TeamModel = New TeamModel();
     }
 }

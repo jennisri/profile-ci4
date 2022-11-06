@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class ProdukModel extends Model
 {
     protected $table            = 'produk';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'id_produk';
     protected $returnType       = 'object';
     protected $allowedFields    = ['slug_produk', 'kategori_slug', 'nama_produk', 'deskripsi', 'gambar_produk'];
 

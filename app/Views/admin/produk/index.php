@@ -1,5 +1,10 @@
 <?php echo $this->extend('admin/layout/template') ?>
 
+<?php echo $this->section('style') ?>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<?php echo $this->endSection(); ?>
+
+
 <?php echo $this->section('content') ?>
 <main>
 	<div class="container-fluid">
@@ -21,11 +26,7 @@
 						</a>
 
 						<!-- alert tambah kategori -->
-						<?php if(session('success')) : ?>
-							<div class="alert alert-success" role="alert">
-								<?php echo session('success'); ?>
-							</div>
-						<?php endif; ?>
+						<div class="swal" data-swal="<?php echo session('success') ?>"></div>
 
 						<div class="table-responsive">
 							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -47,9 +48,12 @@
 											<td><?php echo $produk->kategori_slug; ?></td>
 											<td><?php echo date('d/m/Y H:i:s', strtotime($produk->tanggal_input)) ?></td>
 											<td width="20%" class="text-center">
-												<a href="" class="btn btn-secondary btn-sm" ><i class="fas fa-eye"></i>Detail</a>
-												<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalUbah<?php echo $produk->id_produk ?>"><i class="fas fa-edit"></i> Edit</button>
-												<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalHapus<?php echo $produk->id_produk ?>"><i class="fas fa-trash-alt"></i> Hapus</button>
+												<a href="/daftarproduk/detail/<?php echo $produk->id_produk ?>" class="btn btn-secondary btn-sm" ><i class="fas fa-eye"></i>Detail</a>
+
+												<a href="/daftarproduk/edit/<?php echo $produk->id_produk ?>" class="btn btn-success btn-sm "><i class="fas fa-edit"></i>
+													Edit
+												</a>
+												<button type="button" class="btn btn-danger btn-sm" onclick="hapus('<?php echo $produk->id_produk; ?>')"><i class="fas fa-trash-alt"></i> Hapus</button>
 											</td>
 										</tr>
 
@@ -65,4 +69,68 @@
 
 	</div>
 </main>
+
+<?php echo $this->endSection() ?>
+
+<?php echo $this->section('script') ?>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+	const swal = $('.swal').data('swal');
+
+	if(swal) {
+		Swal.fire({
+			icon: 'success',
+			title: 'Berhasil',
+			text: swal,
+			showConfirmButton: true,
+		})
+	}
+
+	function hapus(id_produk){
+		Swal.fire({
+			title: 'Hapus?',
+			text: "Yakin data produk akan dihapus ?",
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonColor: '#d33',
+			cancelButtonColor: '#3085d6',
+			confirmButtonText: 'Hapus',
+			cancelButtonText: 'Batal'
+		}).then((result) => {
+			$.ajax({
+				type: 'POST',
+				url: '/daftarproduk/delete',
+				data: {
+					_method: 'delete',
+					<?php echo csrf_token() ?>: "<?= csrf_hash() ?>",
+					id_produk: id_produk
+				},
+				dataType: 'json',
+				success: function(response){
+					if(response.success){
+						Swal.fire({
+							icon: 'success',
+							title: 'Berhasil',
+							text: response.success,
+							showConfirmButton: true,
+						}).then((result) => {
+							if (result.value) {
+								window.location.href = "daftarproduk";
+							}
+						});
+					}
+				}
+			})
+			// if (result.isConfirmed) {
+			// 	Swal.fire(
+			// 		'Deleted!',
+			// 		'Your file has been deleted.',
+			// 		'success'
+			// 		)
+			// }
+		})
+	}
+</script>
 <?php echo $this->endSection() ?>

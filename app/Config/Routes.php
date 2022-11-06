@@ -35,21 +35,47 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Admin\DashboardController::index');
+$routes->get('/', 'BerandaController::index');
 
 // routers admin dashboard
 $routes->get('dashboard', 'Admin\DashboardController::index');
 
 // routes admin produk
 $routes->get('daftarproduk', 'Admin\ProdukController::index');
+
 $routes->get('daftarproduk/tambah', 'Admin\ProdukController::form_create');
 $routes->post('daftarproduk/save', 'Admin\ProdukController::save_produk');
+
+$routes->get('daftarproduk/edit/(:num)', 'Admin\ProdukController::form_edit/$1');
+$routes->put('daftarproduk/update/(:num)', 'Admin\ProdukController::update_produk/$1');
+
+$routes->delete('daftarproduk/delete', 'Admin\ProdukController::delete_produk');
+
+$routes->get('daftarproduk/detail/(:num)', 'Admin\ProdukController::detail_produk/$1');
+
+
+// routes admin akun
+$routes->get('/akun', 'Admin\AkunController::index');
+$routes->put('/akun/ubah/(:num)', 'Admin\AkunController::update/$1');
+$routes->delete('/akun/hapus/(:num)', 'Admin\AkunController::delete/$1');
+
+
+
 
 // kategori
 $routes->get('daftarkategori', 'Admin\ProdukController::kategori');
 $routes->post('daftarkategori/tambah', 'Admin\ProdukController::store');
 $routes->put('daftarkategori/edit/(:num)', 'Admin\ProdukController::update/$1');
 $routes->delete('daftarkategori/hapus/(:num)', 'Admin\ProdukController::destroy/$1');
+
+// slider
+$routes->get('slider', 'Admin\SliderController::index');
+$routes->put('slider/edit/(:num)', 'Admin\SliderController::update/$1');
+
+// team
+$routes->get('team', 'Admin\TeamController::index');
+$routes->put('team/edit/(:num)', 'Admin\TeamController::update/$1');
+
 
 /*
  * --------------------------------------------------------------------
